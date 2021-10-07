@@ -15,8 +15,7 @@ def generar_cadena(n):
 def validar_cadena(cadena):
     valida = False
 
-    for i in range(len(cadena)):
-        print(cadena[i])
+    #Todo
 
     return valida
 
