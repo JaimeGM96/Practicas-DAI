@@ -1,5 +1,5 @@
 #./app/app.py
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 app = Flask(__name__)
           
 # Funciones
@@ -61,6 +61,31 @@ def eratostenes(numero):
 @app.route('/fibonacci/<int:numero>')
 def fib(numero):
   return f'Resultado de la sucesión de Fibonacci para n = {numero}: {fibonacci(numero)}'
+
+@app.route('/imagenes')
+def mostrar_imagenes():
+  return '''
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Page not found</title>
+    </head>
+    <body>
+        <div>
+          <h1 style="text-align:center;">Imagenes</h1>
+          <img src="{{url_for('static', filename='imagen1.jpg')}}"/>
+          <br/>
+          <img src="{{url_for('static', filename='imagen2.jpg')}}"/>
+          <br/>
+          <img src="{{url_for('static', filename='imagen3.jpg')}}"/>
+          <br/>
+          <img src="{{url_for('static', filename='imagen4.jpg')}}"/>
+        </div>
+    </body>
+    </html>
+  '''
 
 @app.errorhandler(404)
 def page_not_found(error):
