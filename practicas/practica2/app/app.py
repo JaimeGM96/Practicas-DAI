@@ -64,4 +64,19 @@ def fib(numero):
 
 @app.errorhandler(404)
 def page_not_found(error):
-  return 'Error 404, página no encontrada'
+  return '''
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Page not found</title>
+    </head>
+    <body>
+        <div style="position: absolute; top: 50%; left: 50%; margin-top: -50px; margin-left: -50px; width: 100px; height: 100px;">
+          <h1 style="text-align:center;">404</h1>
+          <p style="text-align:center;">Page not found</p>
+        </div>
+    </body>
+    </html>
+  '''
