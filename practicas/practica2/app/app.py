@@ -1,5 +1,5 @@
 #./app/app.py
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
           
 # Funciones
@@ -61,3 +61,7 @@ def eratostenes(numero):
 @app.route('/fibonacci/<int:numero>')
 def fib(numero):
   return f'Resultado de la sucesión de Fibonacci para n = {numero}: {fibonacci(numero)}'
+
+@app.errorhandler(404)
+def page_not_found(error):
+  return 'Error 404, página no encontrada'
