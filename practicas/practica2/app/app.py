@@ -1,5 +1,6 @@
 #./app/app.py
 from flask import Flask, render_template, url_for, request
+import random, re
 app = Flask(__name__)
           
 # Funciones
@@ -44,6 +45,28 @@ def fibonacci(n):
 
         return n2
 
+def generar_cadena(n):
+    cadena = ''
+
+    for i in range(n):
+        aleatorio = random.randint(0, 1)
+        if aleatorio == 0:
+            cadena = cadena + "["
+        else:
+            cadena = cadena + "]"
+
+    return cadena
+
+def validar_expresiones(cadena):
+    valida0 = re.search('.+\s+[A-Z]{1}', cadena)
+    valida1 = re.search('.+@\w+\.\w+', cadena)
+    valida2 = re.search('\d{4}-|\s+\d{4}-|\s+\d{4}-|\s+\d{4}', cadena)
+
+    if valida0 or valida1 or valida2:
+      return True
+    else:
+      return False
+
 # Páginas
 @app.route('/')
 def hello_world():
@@ -61,6 +84,17 @@ def eratostenes(numero):
 @app.route('/fibonacci/<int:numero>')
 def fib(numero):
   return f'Resultado de la sucesión de Fibonacci para n = {numero}: {fibonacci(numero)}'
+
+@app.route('/corchetes/<int:tam_cadena>')
+def corchetes(tam_cadena):
+  return f'Se ha generado la cadena {generar_cadena(tam_cadena)}'
+
+@app.route('/expresiones_regulares/<expresion>')
+def expresiones_regulares(expresion):
+  if validar_expresiones(expresion):
+    return f'La cadena {expresion} es valida'
+  else:
+    return f'La cadena {expresion} no es valida'
 
 @app.route('/imagenes')
 def mostrar_imagenes():
