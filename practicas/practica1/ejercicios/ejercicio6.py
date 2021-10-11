@@ -1,23 +1,17 @@
 import re
 
 def validar_palabra(cadena):
-    valida = False
-
-    expresion = re.search(r'', cadena)
+    valida = re.search('.+\s+[A-Z]{1}', cadena)
 
     return valida
 
 def validar_correo(cadena):
-    valida = False
-
-    expresion = re.search(r'', cadena)
+    valida = re.search('.+@\w+\.\w+', cadena)
 
     return valida
 
 def validar_tarjeta_credito(cadena):
-    valida = False
-
-    expresion = re.search(r'', cadena)
+    valida = re.search('\d{4}-|\s+\d{4}-|\s+\d{4}-|\s+\d{4}', cadena)
 
     return valida
 
