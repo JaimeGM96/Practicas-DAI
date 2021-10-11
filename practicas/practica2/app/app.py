@@ -1,12 +1,11 @@
 #./app/app.py
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 app = Flask(__name__)
           
 # Funciones
 def ordena_seleccion(m):
     for i in range(len(m)):
         min = i
-
 
         for j in range(i, len(m)):
             if m[j] < m[min]:
@@ -52,7 +51,8 @@ def hello_world():
 
 @app.route('/ordena/<cadena>')
 def ordena(cadena):
-  return f'La cadena {cadena} ordenada sería: {ordena_seleccion(cadena)}'
+  vector = list(map(int, cadena.split(",")))
+  return f'La cadena {cadena} ordenada sería: {ordena_seleccion(vector)}'
 
 @app.route('/eratostenes/<int:numero>')
 def eratostenes(numero):
@@ -64,44 +64,8 @@ def fib(numero):
 
 @app.route('/imagenes')
 def mostrar_imagenes():
-  return '''
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Page not found</title>
-    </head>
-    <body>
-        <div>
-          <h1 style="text-align:center;">Imagenes</h1>
-          <img src="{{url_for('static', filename='imagen1.jpg')}}"/>
-          <br/>
-          <img src="{{url_for('static', filename='imagen2.jpg')}}"/>
-          <br/>
-          <img src="{{url_for('static', filename='imagen3.jpg')}}"/>
-          <br/>
-          <img src="{{url_for('static', filename='imagen4.jpg')}}"/>
-        </div>
-    </body>
-    </html>
-  '''
+  return render_template('imagenes.html')
 
 @app.errorhandler(404)
 def page_not_found(error):
-  return '''
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Page not found</title>
-    </head>
-    <body>
-        <div style="position: absolute; top: 50%; left: 50%; margin-top: -50px; margin-left: -50px; width: 100px; height: 100px;">
-          <h1 style="text-align:center;">404</h1>
-          <p style="text-align:center;">Page not found</p>
-        </div>
-    </body>
-    </html>
-  '''
+  return render_template('error.html')
