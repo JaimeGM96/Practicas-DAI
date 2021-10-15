@@ -98,7 +98,20 @@ def expresiones_regulares(expresion):
 
 @app.route('/imagenes')
 def mostrar_imagenes():
-  return render_template('imagenes.html')
+  return '''
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Imagenes</title>
+    </head>
+    <body>
+        <image src="{{url_for('static', filename='images/imagen1.jpg')}}">
+        <image src="{{url_for('static', filename='images/imagen2.jpg')}}">
+    </body>
+    </html>
+  '''
 
 @app.errorhandler(404)
 def page_not_found(error):
