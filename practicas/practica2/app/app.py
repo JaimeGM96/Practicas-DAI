@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Páginas
 @app.route('/')
 def hello_world():
-  return 'Hello, World!'
+  return render_template('index.html')
 
 @app.errorhandler(404)
 def page_not_found(error):
