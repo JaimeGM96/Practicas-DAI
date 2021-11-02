@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, url_for, session, redirect, f
 import random, re
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = 'clave-secreta-para-el-uso-de-sesiones'
           
 # Páginas
 @app.route('/')
@@ -14,11 +14,13 @@ def index():
 def login():
   error=None
   if request.method == 'POST':
-    if request.form['username'] != 'admin' or \
+    usuario = request.form['username']
+    if usuario != 'admin' or \
             request.form['password'] != 'admin':
         error = 'Invalid credentials'
     else:
         flash('You were successfully logged in')
+        session['username'] = usuario
         return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
