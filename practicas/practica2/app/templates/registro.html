@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-  Login
+  Registro
 {% endblock title %}
 
 {% block body %}
@@ -15,18 +15,7 @@
           <label for="exampleDropdownFormPassword1">Contraseña</label>
           <input type="password" class="form-control" name="password" placeholder="Contraseña">
         </div>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="dropdownCheck">
-          <label class="form-check-label" for="dropdownCheck">
-            Recordar
-          </label>
-        </div>
-        <button type="submit" value="Login" class="btn btn-primary">Iniciar sesión</button>
-        <br/>
-        <p><a href="{{ url_for('registro') }}">¿No tienes cuenta? Crea una aquí.</a></p>
-        {% if error %}
-          <p class=error><strong>Error:</strong> {{ error }}
-        {% endif %}
+        <button type="submit" value="Login" class="btn btn-primary">Registrarse</button>
       </form>
   </div>
 {% endblock body %}

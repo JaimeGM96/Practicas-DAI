@@ -1,26 +1,39 @@
 #./app/app.py
 from flask import Flask, render_template, request, url_for, session, redirect, flash
 import random, re
+from pickleshare import *
 
 app = Flask(__name__)
 app.secret_key = 'clave-secreta-para-el-uso-de-sesiones'
+db = PickleShareDB('db_pickleshare/')
           
 # Páginas
 @app.route('/')
 def index():
   return render_template('index.html')
 
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+  if request.method == 'POST':
+    db['username'] = request.form['username']
+    db['password'] = request.form['password']
+    flash('Te has registrado correctamente')
+    return redirect(url_for('index'))
+    
+  return render_template('registro.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   error=None
   if request.method == 'POST':
-    usuario = request.form['username']
-    if usuario != 'admin' or \
-            request.form['password'] != 'admin':
+    username = request.form['username']
+    password = request.form['password']
+    if username != db['username'] or \
+            password != db['password']:
         error = 'Invalid credentials'
     else:
-        flash('You were successfully logged in')
-        session['username'] = usuario
+        flash('Has iniciado sesión correctamente')
+        session['username'] = username
         return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
