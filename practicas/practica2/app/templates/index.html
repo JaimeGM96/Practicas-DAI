@@ -31,9 +31,26 @@
                 <li><a class="dropdown-item" href="/">Something else here</a></li>
               </ul>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login') }}">Iniciar sesión</a>
-            </li>
+            {% if session['username'] %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Cerrar sesión</a>
+              </li>
+              <li class="nav-item">
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                      <ul class=flashes>
+                      {% for message in messages %}
+                          <p>{{ message }}</p>
+                      {% endfor %}
+                      </ul>
+                  {% endif %}
+              {% endwith %}
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('login') }}">Iniciar sesión</a>
+              </li>
+            {% endif %}
           </ul>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
@@ -50,7 +67,7 @@
         Column
       </div>
       <div class="col">
-        Column
+        <h1>Contenido principal</h1>
       </div>
       <div class="col">
         Column
