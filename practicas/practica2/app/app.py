@@ -64,16 +64,32 @@ def eratostenes():
 @app.route('/fibonacci', methods=['GET', 'POST'])
 def fibonacci():
   resultado = None
+  if request.method == 'POST':
+    datos = request.form['datos']
+    resultado = fibonacci(int(datos))
+
   return render_template('ejercicios.html', resultado=resultado)
 
 @app.route('/corchetes', methods=['GET', 'POST'])
 def corchetes():
   resultado = None
+  if request.method == 'POST':
+    datos = request.form['datos']
+    resultado = generar_cadena(int(datos))
+
   return render_template('ejercicios.html', resultado=resultado)
 
 @app.route('/expresiones_regulares', methods=['GET', 'POST'])
 def expresiones_regulares():
   resultado = None
+  if request.method == 'POST':
+    datos = request.form['datos']
+    resultado = validar_expresiones(datos)
+    if resultado:
+      resultado = "cadena válida"
+    else:
+      resultado = "cadena no válida"
+
   return render_template('ejercicios.html', resultado=resultado)
 
 @app.errorhandler(404)
