@@ -42,25 +42,39 @@ def logout():
    session.pop('username', None)
    return redirect(url_for('index'))
 
-@app.route('/ordena')
+@app.route('/ordena', methods=['GET', 'POST'])
 def ordena():
-  return render_template('ordena.html')
+  resultado = None
+  if request.method == 'POST':
+    datos = request.form['datos']
+    resultado = list(map(int, datos.split(",")))
+    ordena_seleccion(resultado)
 
-@app.route('/eratostenes')
+  return render_template('ejercicios.html', resultado=resultado)
+
+@app.route('/eratostenes', methods=['GET', 'POST'])
 def eratostenes():
-  return render_template('eratostenes.html')
+  resultado = None
+  if request.method == 'POST':
+    datos = request.form['datos']
+    resultado = criba_eratostenes(int(datos))
 
-@app.route('/fibonacci')
+  return render_template('ejercicios.html', resultado=resultado)
+
+@app.route('/fibonacci', methods=['GET', 'POST'])
 def fibonacci():
-  return render_template('fibonacci.html')
+  resultado = None
+  return render_template('ejercicios.html', resultado=resultado)
 
-@app.route('/corchetes')
+@app.route('/corchetes', methods=['GET', 'POST'])
 def corchetes():
-  return render_template('corchetes.html')
+  resultado = None
+  return render_template('ejercicios.html', resultado=resultado)
 
-@app.route('/expresiones_regulares')
+@app.route('/expresiones_regulares', methods=['GET', 'POST'])
 def expresiones_regulares():
-  return render_template('expresiones_regulares.html')
+  resultado = None
+  return render_template('ejercicios.html', resultado=resultado)
 
 @app.errorhandler(404)
 def page_not_found(error):
