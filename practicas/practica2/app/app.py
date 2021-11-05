@@ -19,7 +19,7 @@ def registro():
     db['password'] = request.form['password']
     flash('Te has registrado correctamente')
     return redirect(url_for('index'))
-    
+
   return render_template('registro.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -32,10 +32,15 @@ def login():
             password != db['password']:
         error = 'Invalid credentials'
     else:
-        flash('Has iniciado sesión correctamente')
+        flash('Bienvenido ' + username)
         session['username'] = username
         return redirect(url_for('index'))
   return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+   session.pop('username', None)
+   return redirect(url_for('index'))
 
 @app.route('/ordena')
 def ordena():
