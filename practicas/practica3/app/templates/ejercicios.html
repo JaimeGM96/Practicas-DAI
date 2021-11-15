@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Ejercicios
+{% endblock title %}
+
+{% block body %}
+  <div class="container">
+    <form method="post" class="px-4 py-3" style="margin: 18vw;">
+        <div class="form-group">
+          <label class="sr-only">Inserte los datos</label>
+          <input type="text" name="datos" class="form-control" id="datos" placeholder="(4,3,1,7), 100, 5, etc." value="{{ request.form.datos }}">
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary">Obtener resultado</button>
+        <br/>
+        {% if resultado %}
+          <p class=error>El resultado es: {{ resultado }}
+        {% endif %}
+      </form>
+  </div>
+{% endblock body %}
