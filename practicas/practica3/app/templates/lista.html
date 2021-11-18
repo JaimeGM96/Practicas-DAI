@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Friends
+{% endblock title %}
+
+{% block body %}
+    <div class="container">
+        <ul class=flashes>
+        {% for episodio in episodios %}
+            <p>{{ episodio.name }}</p>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock body %}

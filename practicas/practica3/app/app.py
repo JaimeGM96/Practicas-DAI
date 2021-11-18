@@ -2,21 +2,34 @@
 from flask import Flask, render_template, request, url_for, session, redirect, flash
 import random, re
 from pickleshare import *
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.secret_key = 'clave-secreta-para-el-uso-de-sesiones'
-db = PickleShareDB('db_pickleshare/')
+client = MongoClient("mongo", 27017)
+db = client.SampleCollections 
           
 # Páginas
 @app.route('/')
 def index():
   return render_template('index.html')
 
+@app.route('/mongo')
+def mongo():
+	episodios = db.samples_friends.find()
+
+	lista_episodios = []
+	for episodio in episodios:
+		app.logger.debug(episodio)
+		lista_episodios.append(episodio)
+
+	return render_template('lista.html', episodios=lista_episodios)
+
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
   if request.method == 'POST':
-    db['username'] = request.form['username']
-    db['password'] = request.form['password']
+    #db['username'] = request.form['username']
+    #db['password'] = request.form['password']
     flash('Te has registrado correctamente')
     return redirect(url_for('index'))
 
@@ -28,13 +41,13 @@ def login():
   if request.method == 'POST':
     username = request.form['username']
     password = request.form['password']
-    if username != db['username'] or \
-            password != db['password']:
-        error = 'Invalid credentials'
-    else:
-        flash('Bienvenido ' + username)
-        session['username'] = username
-        return redirect(url_for('index'))
+    #if username != db['username'] or \
+    #        password != db['password']:
+    #    error = 'Invalid credentials'
+    #else:
+    #    flash('Bienvenido ' + username)
+    #    session['username'] = username
+    #    return redirect(url_for('index'))
   return render_template('login.html', error=error)
 
 @app.route('/logout')
