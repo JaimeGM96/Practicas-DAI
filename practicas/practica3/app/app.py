@@ -1,7 +1,5 @@
 #./app/app.py
-from flask import Flask, render_template, request, url_for, session, redirect, flash
-import random, re
-from pickleshare import *
+from flask import Flask, render_template, request, url_for, redirect, jsonify
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -10,166 +8,80 @@ client = MongoClient("mongo", 27017)
 db = client.SampleCollections 
           
 # Páginas
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+  if request.method == 'POST':
+    clave = request.form['clave']
+    valor = request.form['valor']
+    
+    if clave == 'name':
+      pokemons = db.samples_pokemon.find({'name': valor})
+    else:
+      pokemons = db.samples_pokemon.find({'num': valor})
+
+    lista_pokemons = []
+    for pokemon in pokemons:
+      app.logger.debug(pokemon)
+      lista_pokemons.append(pokemon)
+
+    return render_template('lista.html', elementos=lista_pokemons)
+
   return render_template('index.html')
 
 @app.route('/mongo')
 def mongo():
-	episodios = db.samples_friends.find()
+	pokemons = db.samples_pokemon.find()
 
-	lista_episodios = []
-	for episodio in episodios:
-		app.logger.debug(episodio)
-		lista_episodios.append(episodio)
+	lista_pokemons = []
+	for pokemon in pokemons:
+		app.logger.debug(pokemon)
+		lista_pokemons.append(pokemon)
 
-	return render_template('lista.html', episodios=lista_episodios)
+	return render_template('lista.html', elementos=lista_pokemons)
 
-@app.route('/registro', methods=['GET', 'POST'])
-def registro():
+@app.route('/pokemon', methods=['GET', 'POST'])
+def pokemon():
   if request.method == 'POST':
-    #db['username'] = request.form['username']
-    #db['password'] = request.form['password']
-    flash('Te has registrado correctamente')
-    return redirect(url_for('index'))
+    nombre = request.form['name']
+    num = request.form['num']
+    caramelo = nombre + ' Candy'
+    tipos = request.form['types']
+    lista_tipos = list(map(str, tipos.split(",")))
+    pokemon = {
+      'id': float(num), 
+      'num': num, 
+      'name': nombre, 
+      'img': 'http://www.serebii.net/pokemongo/pokemon/001.png', 
+      'type': lista_tipos, 
+      'height': '0.71 m', 
+      'weight': '6.9 kg', 
+      'candy': caramelo, 
+      'candy_count': 25.0, 
+      'egg': '2 km', 
+      'spawn_chance': 0.69, 
+      'avg_spawns': 69.0, 
+      'spawn_time': '20:00', 
+      'multipliers': [1.58], 
+      'weaknesses': [
+        'Fire', 
+        'Ice', 
+        'Flying', 
+        'Psychic'
+      ]
+    }
 
-  return render_template('registro.html')
+    db.samples_pokemon.insert_one(pokemon)
+    return "Insertado correctamente"
+  else:
+    pokemons = db.samples_pokemon.find({'name': 'Bulbasaur'})
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-  error=None
-  if request.method == 'POST':
-    username = request.form['username']
-    password = request.form['password']
-    #if username != db['username'] or \
-    #        password != db['password']:
-    #    error = 'Invalid credentials'
-    #else:
-    #    flash('Bienvenido ' + username)
-    #    session['username'] = username
-    #    return redirect(url_for('index'))
-  return render_template('login.html', error=error)
+    lista_pokemons = []
+    for pokemon in pokemons:
+      app.logger.debug(pokemon)
+      lista_pokemons.append(pokemon)
 
-@app.route('/logout')
-def logout():
-   session.pop('username', None)
-   return redirect(url_for('index'))
-
-@app.route('/ordena', methods=['GET', 'POST'])
-def ordena():
-  resultado = None
-  if request.method == 'POST':
-    datos = request.form['datos']
-    resultado = list(map(int, datos.split(",")))
-    ordena_seleccion(resultado)
-
-  return render_template('ejercicios.html', resultado=resultado)
-
-@app.route('/eratostenes', methods=['GET', 'POST'])
-def eratostenes():
-  resultado = None
-  if request.method == 'POST':
-    datos = request.form['datos']
-    resultado = criba_eratostenes(int(datos))
-
-  return render_template('ejercicios.html', resultado=resultado)
-
-@app.route('/fibonacci', methods=['GET', 'POST'])
-def fibonacci():
-  resultado = None
-  if request.method == 'POST':
-    datos = request.form['datos']
-    resultado = fibonacci(int(datos))
-
-  return render_template('ejercicios.html', resultado=resultado)
-
-@app.route('/corchetes', methods=['GET', 'POST'])
-def corchetes():
-  resultado = None
-  if request.method == 'POST':
-    datos = request.form['datos']
-    resultado = generar_cadena(int(datos))
-
-  return render_template('ejercicios.html', resultado=resultado)
-
-@app.route('/expresiones_regulares', methods=['GET', 'POST'])
-def expresiones_regulares():
-  resultado = None
-  if request.method == 'POST':
-    datos = request.form['datos']
-    resultado = validar_expresiones(datos)
-    if resultado:
-      resultado = "cadena válida"
-    else:
-      resultado = "cadena no válida"
-
-  return render_template('ejercicios.html', resultado=resultado)
+    return str(lista_pokemons)
 
 @app.errorhandler(404)
 def page_not_found(error):
   return render_template('error.html')
-
-
-# Funciones
-def ordena_seleccion(m):
-    for i in range(len(m)):
-        min = i
-
-        for j in range(i, len(m)):
-            if m[j] < m[min]:
-                min = j
-
-        if min != i:
-            m[i], m[min] = m[min], m[i]
-
-def criba_eratostenes(x):
-    numeros = list(range(2, x+1))
-    i = 0
-
-    while numeros[i]**2 <= x:
-        for n in numeros:
-            if n != numeros[i]:
-              if n % numeros[i] == 0:
-                numeros.remove(n)
-        
-        i += 1
-    return numeros
-
-def fibonacci(n):
-    n0 = 0
-    n1 = n2 = 1
-
-    if n == 1:
-        return 0
-    elif n == 2:
-        return 1
-    elif n > 2:
-        i = 3
-        while i != n+1:
-            n2 = n0 + n1
-            n0, n1 = n1, n2
-            i += 1
-
-        return n2
-
-def generar_cadena(n):
-    cadena = ''
-
-    for i in range(n):
-        aleatorio = random.randint(0, 1)
-        if aleatorio == 0:
-            cadena = cadena + "["
-        else:
-            cadena = cadena + "]"
-
-    return cadena
-
-def validar_expresiones(cadena):
-    valida0 = re.search('.+\s+[A-Z]{1}', cadena)
-    valida1 = re.search('.+@\w+\.\w+', cadena)
-    valida2 = re.search('\d{4}-|\s+\d{4}-|\s+\d{4}-|\s+\d{4}', cadena)
-
-    if valida0 or valida1 or valida2:
-      return True
-    else:
-      return False
