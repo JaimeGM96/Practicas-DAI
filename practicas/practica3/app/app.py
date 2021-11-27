@@ -45,48 +45,68 @@ def mongo():
 
   return render_template('lista.html', pokemons=pagination_pokemons, page=page, per_page=per_page, pagination=pagination)
 
-@app.route('/pokemon', methods=['GET', 'POST'])
-def pokemon():
-  if request.method == 'POST':
-    nombre = request.form['name']
-    num = request.form['num']
-    caramelo = nombre + ' Candy'
-    tipos = request.form['types']
-    lista_tipos = list(map(str, tipos.split(",")))
-    pokemon = {
-      'id': float(num), 
-      'num': num, 
-      'name': nombre, 
-      'img': 'http://www.serebii.net/pokemongo/pokemon/001.png', 
-      'type': lista_tipos, 
-      'height': '0.71 m', 
-      'weight': '6.9 kg', 
-      'candy': caramelo, 
-      'candy_count': 25.0, 
-      'egg': '2 km', 
-      'spawn_chance': 0.69, 
-      'avg_spawns': 69.0, 
-      'spawn_time': '20:00', 
-      'multipliers': [1.58], 
-      'weaknesses': [
-        'Fire', 
-        'Ice', 
-        'Flying', 
-        'Psychic'
-      ]
-    }
+@app.route('/pokemons')
+def get_pokemons():
+  pokemons = db.samples_pokemon.find()
 
-    db.samples_pokemon.insert_one(pokemon)
-    return "Insertado correctamente"
-  else:
-    pokemons = db.samples_pokemon.find({'name': 'Bulbasaur'})
+  lista_pokemons = []
+  for pokemon in pokemons:
+    app.logger.debug(pokemon)
+    lista_pokemons.append(pokemon)
 
-    lista_pokemons = []
-    for pokemon in pokemons:
-      app.logger.debug(pokemon)
-      lista_pokemons.append(pokemon)
+  return jsonify(str(lista_pokemons))
 
-    return str(lista_pokemons)
+@app.route('/pokemons/<string:pokemon_name>')
+def get_pokemon(pokemon_name):
+  pokemons = db.samples_pokemon.find({'name': pokemon_name})
+
+  lista_pokemons = []
+  for pokemon in pokemons:
+    app.logger.debug(pokemon)
+    lista_pokemons.append(pokemon)
+
+  return jsonify(str(lista_pokemons))
+
+@app.route('/pokemons/<string:pokemon_name>', methods=['POST'])
+def add_pokemon(pokemon_name):
+  pokemon = {
+    'id': 161.0, 
+    'num': '161', 
+    'name': pokemon_name,
+    'type': ['Grass'], 
+    'height': '0.71 m', 
+    'weight': '6.9 kg', 
+    'candy_count': 25.0, 
+    'egg': '2 km', 
+    'spawn_chance': 0.69, 
+    'avg_spawns': 69.0, 
+    'spawn_time': '20:00', 
+    'multipliers': [1.58], 
+    'weaknesses': [
+      'Fire', 
+      'Ice', 
+      'Flying', 
+      'Psychic'
+    ]
+  }
+
+  db.samples_pokemon.insert_one(pokemon)
+  return "Insertado correctamente"
+
+@app.route('/pokemons/<string:pokemon_name>', methods=['PUT'])
+def update_pokemon(pokemon_name):
+  nuevo_nombre = "Nuevo nombre"
+  db.samples_pokemon.update(
+    {'name': nuevo_nombre}
+  )
+  return "Actualizado correctamente"
+
+@app.route('/pokemons/<string:pokemon_name>', methods=['DELETE'])
+def delete_pokemon(pokemon_name):
+  db.samples_pokemon.delete(
+    {'name': pokemon_name}
+  )
+  return "Eliminado correctamente"
 
 @app.errorhandler(404)
 def page_not_found(error):
