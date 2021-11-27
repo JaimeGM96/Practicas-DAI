@@ -5,28 +5,25 @@
 {% endblock title %}
 
 {% block body %}
-    <div class="container">
-        <ul>
-        {% for elemento in elementos %}
-            <p>{{ elemento }}</p>
-        {% endfor %}
-        </ul>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="/" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="/">1</a></li>
-            <li class="page-item"><a class="page-link" href="/">2</a></li>
-            <li class="page-item"><a class="page-link" href="/">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="/" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+  <div class="container">
+    {{ pagination.links }}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Pokemons</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pokemon in pokemons %}
+          <tr>
+            <td>{{ loop.index + (page - 1) * per_page }}</td>
+            <td>{{ pokemon.name }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+    {{ pagination.links }}
+  </div>
 {% endblock body %}

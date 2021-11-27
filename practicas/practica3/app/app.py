@@ -1,6 +1,7 @@
 #./app/app.py
 from flask import Flask, render_template, request, url_for, redirect, jsonify
 from pymongo import MongoClient
+from flask_paginate import Pagination, get_page_args
 
 app = Flask(__name__)
 app.secret_key = 'clave-secreta-para-el-uso-de-sesiones'
@@ -24,20 +25,25 @@ def index():
       app.logger.debug(pokemon)
       lista_pokemons.append(pokemon)
 
-    return render_template('lista.html', elementos=lista_pokemons)
+    return render_template('info_pokemon.html', elementos=lista_pokemons)
 
   return render_template('index.html')
 
 @app.route('/mongo')
 def mongo():
-	pokemons = db.samples_pokemon.find()
+  page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
 
-	lista_pokemons = []
-	for pokemon in pokemons:
-		app.logger.debug(pokemon)
-		lista_pokemons.append(pokemon)
+  pokemons = db.samples_pokemon.find()
 
-	return render_template('lista.html', elementos=lista_pokemons)
+  lista_pokemons = []
+  for pokemon in pokemons:
+    app.logger.debug(pokemon)
+    lista_pokemons.append(pokemon)
+
+  pagination_pokemons = lista_pokemons[offset: offset + per_page]
+  pagination = Pagination(page=page, per_page=per_page, total=len(lista_pokemons), css_framework='bootstrap3')
+
+  return render_template('lista.html', pokemons=pagination_pokemons, page=page, per_page=per_page, pagination=pagination)
 
 @app.route('/pokemon', methods=['GET', 'POST'])
 def pokemon():
