@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Galeria
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <form action="/nueva_galeria" method="post" class="px-4 py-3" style="margin: 18vw;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+</div>
+{% endblock body %}

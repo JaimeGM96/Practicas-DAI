@@ -27,8 +27,7 @@ def nueva_galeria(request):
         form = GaleriaForm(request.POST)
 
         if form.is_valid():
-            galeria = form.save(commit=False)
-            galeria.save()
+            galeria = form.save()
             return HttpResponseRedirect('/')
     else:
         form = GaleriaForm()
@@ -37,4 +36,20 @@ def nueva_galeria(request):
         'form': form
     }
 
-    return render(request, 'test.html', context)
+    return render(request, 'galeria.html', context)
+
+def nuevo_cuadro(request):
+    if request.method == 'POST':
+        form = CuadroForm(request.POST)
+
+        if form.is_valid():
+            cuadro = form.save()
+            return HttpResponseRedirect('/')
+    else:
+        form = CuadroForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'cuadro.html', context)
