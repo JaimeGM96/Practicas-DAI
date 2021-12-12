@@ -5,5 +5,37 @@
 {% endblock title %}
 
 {% block body %}
-  <h1>Hola {{ galeria.nombre }}</h1>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">DAI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Opciones
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/lista_galerias">Mostrar galerías</a></li>
+                <li><a class="dropdown-item" href="/lista_cuadros">Mostrar cuadros</a></li>
+                <li><a class="dropdown-item" href="/nueva_galeria">Insertar galería</a></li>
+                <li><a class="dropdown-item" href="/nuevo_cuadro">Insertar cuadro</a></li>
+                <li><a class="dropdown-item" href="/modificar_galeria">Modificar galeria</a></li>
+                <li><a class="dropdown-item" href="/modificar_cuadro">Modificar cuadro</a></li>
+                <li><a class="dropdown-item" href="/borrar_galeria">Borrar galeria</a></li>
+                <li><a class="dropdown-item" href="/borrar_cuadro">Borrar cuadro</a></li>
+                <li><a class="dropdown-item" href="/test_template">Página de pruebas</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
 {% endblock body %}

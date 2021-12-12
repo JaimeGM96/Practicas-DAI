@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Galerias
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    {% for data in dataset %}
+        {{ data.nombre }}<br/>
+        {{ data.dirección }}<br/>
+        <hr/>
+    {% endfor %}
+</div>
+{% endblock body %}
