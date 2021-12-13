@@ -39,20 +39,6 @@ def lista_cuadros(request):
 
     return render(request, "lista_cuadros.html", context)
 
-def detalle_galeria(request, id):
-    context = {}
-
-    context["data"] = Galeria.objects.get(id=id)
-
-    return render(request, "detalle_galeria.html", context)
-
-def detalle_cuadro(request, id):
-    context = {}
-
-    context["data"] = Cuadro.objects.get(id=id)
-
-    return render(request, "detalle_cuadro.html", context)
-
 def nueva_galeria(request):
     if request.method == 'POST':
         form = GaleriaForm(request.POST)
