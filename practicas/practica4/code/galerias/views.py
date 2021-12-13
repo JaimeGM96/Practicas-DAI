@@ -6,24 +6,6 @@ from .forms import GaleriaForm, CuadroForm
 def index(request):
     return render(request, 'index.html')
 
-def test_template(request):
-    if request.method == 'POST' and 'modificado' in request.POST:
-        form = CuadroForm(request.POST)
-
-        if form.is_valid():
-            nombre = request.POST.get('nombre')
-            galeria = request.POST.get('galeria')
-            autor = request.POST.get('autor')
-            Cuadro.objects.filter(nombre=nombre).update(nombre=nombre, galeria=galeria, autor=autor)
-            return HttpResponseRedirect('/')
-    else:
-        form = CuadroForm()
-
-    context = {
-        'form': form
-    }
-
-    return render(request, 'test.html', context)
 
 def lista_galerias(request):
     context = {}
