@@ -6,10 +6,27 @@
 
 {% block body %}
 <div class="container">
-    {% for data in dataset %}
-        {{ data.nombre }}<br/>
-        {{ data.dirección }}<br/>
-        <hr/>
-    {% endfor %}
+  <h3>Lista de cuadros</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Dirección</th>
+        <th scope="col">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in dataset %}
+      <tr>
+        <td>{{ data.nombre }}</td>
+        <td>{{ data.dirección }}</td>
+        <td>
+          <a type="button" class="btn btn-warning" href="/modificar_galeria/{{ data.id }}">Actualizar</a>
+          <a type="button" class="btn btn-danger" href="/borrar_galeria/{{ data.id }}">Borrar</a>
+        </td>
+      </tr>        
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock body %}

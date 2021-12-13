@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}
-  Página de test
+  Borrar cuadro
 {% endblock title %}
 
 {% block body %}
 <div class="container">
-    <form action="/test_template" method="post" class="px-4 py-3" style="margin: 18vw;">
+    <form action="/borrar_cuadro" method="post" class="px-4 py-3" style="margin: 18vw;">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="hidden" name="pk_cuadro" value="{{ form.pk }}">
-        <input type="hidden" name="modificado" value="modificado">
-        <input type="submit" value="Save">
+        <input type="hidden" name="borrado" value="borrado">
+        <input type="submit" value="Borrar">
     </form>
 </div>
 {% endblock body %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from .models import Galeria, Cuadro
 from .forms import GaleriaForm, CuadroForm
@@ -84,3 +84,51 @@ def nuevo_cuadro(request):
     }
 
     return render(request, 'cuadro.html', context)
+
+def modificar_galeria(request, id):
+    galeria = Galeria.objects.get(id=id)
+    form = GaleriaForm(initial={'nombre': galeria.nombre, 'dirección': galeria.dirección})
+    
+    if request.method == 'POST':
+        form = GaleriaForm(request.POST, instance=galeria)
+        if form.is_valid():
+            form.save()
+            model = form.instance
+            return redirect('/lista_galerias')
+    
+    context = {
+        'form': form
+    }
+
+    return render(request, 'modificar_galeria.html', context)
+
+def modificar_cuadro(request, id):
+    cuadro = Cuadro.objects.get(id=id)
+    form = CuadroForm(initial={'nombre': cuadro.nombre, 'galeria': cuadro.galeria, 'autor': cuadro.autor})
+    
+    if request.method == 'POST':
+        form = CuadroForm(request.POST, instance=cuadro)
+        if form.is_valid():
+            form.save()
+            model = form.instance
+            return redirect('/lista_cuadros')
+    
+    context = {
+        'form': form
+    }
+
+    return render(request, 'modificar_cuadro.html', context)
+
+def borrar_galeria(request, id):
+    galeria = Galeria.objects.get(id=id)
+
+    galeria.delete()
+
+    return redirect('lista_galerias')
+
+def borrar_cuadro(request, id):
+    cuadro = Cuadro.objects.get(id=id)
+
+    cuadro.delete()
+
+    return redirect('lista_cuadros')
