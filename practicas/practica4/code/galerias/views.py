@@ -1,11 +1,10 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
+from django.shortcuts import render, HttpResponse, redirect
 from django.http import HttpResponseRedirect
 from .models import Galeria, Cuadro
 from .forms import GaleriaForm, CuadroForm
 
 def index(request):
     return render(request, 'index.html')
-
 
 def lista_galerias(request):
     context = {}
