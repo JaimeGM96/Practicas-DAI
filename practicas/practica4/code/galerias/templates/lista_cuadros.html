@@ -23,8 +23,10 @@
         <td>{{ data.galeria }}</td>
         <td>{{ data.autor }}</td>
         <td>
-          <a type="button" class="btn btn-warning" href="/modificar_cuadro/{{ data.id }}">Actualizar</a>
-          <a type="button" class="btn btn-danger" href="/borrar_cuadro/{{ data.id }}">Borrar</a>
+          {% if user.is_authenticated and user.is_staff %}
+            <a type="button" class="btn btn-warning" href="/modificar_cuadro/{{ data.id }}">Actualizar</a>
+            <a type="button" class="btn btn-danger" href="/borrar_cuadro/{{ data.id }}">Borrar</a>
+          {% endif %}
         </td>
       </tr>        
       {% endfor %}

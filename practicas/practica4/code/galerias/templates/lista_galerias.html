@@ -21,8 +21,10 @@
         <td>{{ data.nombre }}</td>
         <td>{{ data.dirección }}</td>
         <td>
-          <a type="button" class="btn btn-warning" href="/modificar_galeria/{{ data.id }}">Actualizar</a>
-          <a type="button" class="btn btn-danger" href="/borrar_galeria/{{ data.id }}">Borrar</a>
+          {% if user.is_authenticated and user.is_superuser %}
+            <a type="button" class="btn btn-warning" href="/modificar_galeria/{{ data.id }}">Actualizar</a>
+            <a type="button" class="btn btn-danger" href="/borrar_galeria/{{ data.id }}">Borrar</a>
+          {% endif %}
         </td>
       </tr>        
       {% endfor %}
