@@ -84,12 +84,34 @@ def add_pokemon(pokemon_name):
   }
 
   db.samples_pokemon.insert_one(pokemon)
-  return "Insertado correctamente"
+  response = jsonify('Pokemon insertado correctamente')
+  response.status_code = 200
+  return response
+
+@app.route('/actualiza-pokemon/<id>', methods=['PUT'])
+def update_pokemon_id(id):
+  nuevo_nombre = "Pikachu"
+  db.samples_pokemon.update_one({
+    'id': id
+  }, {
+    "$set": {
+      'name': nuevo_nombre
+    }
+  })
+  response = jsonify('Pokemon modificado correctamente')
+  response.status_code = 200
+  return response
 
 @app.route('/actualiza-pokemon/<string:nombre>', methods=['PUT'])
-def update_pokemon(nombre):
-  nuevo_nombre = "Nuevo nombre"
-  db.samples_pokemon.update_one({'name': nuevo_nombre})
+def update_pokemon_nombre(nombre):
+  nuevo_nombre = "Pikachu"
+  db.samples_pokemon.update_one({
+    'name': nombre
+  }, {
+    "$set": {
+      'name': nuevo_nombre
+    }
+  })
   response = jsonify('Pokemon modificado correctamente')
   response.status_code = 200
   return response
