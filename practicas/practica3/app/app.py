@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, url_for, redirect, jsonify
 from pymongo import MongoClient
 from flask_paginate import Pagination, get_page_args
+from bson.json_util import dumps
 
 app = Flask(__name__)
 app.secret_key = 'clave-secreta-para-el-uso-de-sesiones'
@@ -29,8 +30,8 @@ def index():
 
   return render_template('index.html')
 
-@app.route('/mongo')
-def mongo():
+@app.route('/todos-pokemons')
+def todos_pokemons():
   page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
 
   pokemons = db.samples_pokemon.find()
@@ -48,26 +49,18 @@ def mongo():
 @app.route('/pokemons')
 def get_pokemons():
   pokemons = db.samples_pokemon.find()
+  response = dumps(pokemons)
 
-  lista_pokemons = []
-  for pokemon in pokemons:
-    app.logger.debug(pokemon)
-    lista_pokemons.append(pokemon)
+  return response
 
-  return jsonify(str(lista_pokemons))
+@app.route('/pokemon/<int:id>')
+def get_pokemon(id):
+  pokemon = db.samples_pokemon.find_one({'id': id})
+  respone = dumps(pokemon)
 
-@app.route('/pokemons/<string:pokemon_name>')
-def get_pokemon(pokemon_name):
-  pokemons = db.samples_pokemon.find({'name': pokemon_name})
+  return respone
 
-  lista_pokemons = []
-  for pokemon in pokemons:
-    app.logger.debug(pokemon)
-    lista_pokemons.append(pokemon)
-
-  return jsonify(str(lista_pokemons))
-
-@app.route('/pokemons/<string:pokemon_name>', methods=['POST'])
+@app.route('/aniade-pokemon/<string:pokemon_name>', methods=['POST'])
 def add_pokemon(pokemon_name):
   pokemon = {
     'id': 161.0, 
@@ -91,22 +84,51 @@ def add_pokemon(pokemon_name):
   }
 
   db.samples_pokemon.insert_one(pokemon)
-  return "Insertado correctamente"
+  response = jsonify('Pokemon insertado correctamente')
+  response.status_code = 200
+  return response
 
-@app.route('/pokemons/<string:pokemon_name>', methods=['PUT'])
-def update_pokemon(pokemon_name):
-  nuevo_nombre = "Nuevo nombre"
-  db.samples_pokemon.update(
-    {'name': nuevo_nombre}
-  )
-  return "Actualizado correctamente"
+@app.route('/actualiza-pokemon/<id>', methods=['PUT'])
+def update_pokemon_id(id):
+  nuevo_nombre = "Pikachu"
+  db.samples_pokemon.update_one({
+    'id': id
+  }, {
+    "$set": {
+      'name': nuevo_nombre
+    }
+  })
+  response = jsonify('Pokemon modificado correctamente')
+  response.status_code = 200
+  return response
 
-@app.route('/pokemons/<string:pokemon_name>', methods=['DELETE'])
-def delete_pokemon(pokemon_name):
-  db.samples_pokemon.delete(
-    {'name': pokemon_name}
-  )
-  return "Eliminado correctamente"
+@app.route('/actualiza-pokemon/<string:nombre>', methods=['PUT'])
+def update_pokemon_nombre(nombre):
+  nuevo_nombre = "Pikachu"
+  db.samples_pokemon.update_one({
+    'name': nombre
+  }, {
+    "$set": {
+      'name': nuevo_nombre
+    }
+  })
+  response = jsonify('Pokemon modificado correctamente')
+  response.status_code = 200
+  return response
+
+@app.route('/borrar-pokemon/<int:id>', methods=['DELETE'])
+def delete_pokemon_id(id):
+  db.samples_pokemon.delete_one({'id': id})
+  response = jsonify('Pokemon eliminado correctamente')
+  response.status_code = 200
+  return response
+
+@app.route('/borrar-pokemon/<string:nombre>', methods=['DELETE'])
+def delete_pokemon_nombre(nombre):
+  db.samples_pokemon.delete_one({'name': nombre})
+  response = jsonify('Pokemon eliminado correctamente')
+  response.status_code = 200
+  return response
 
 @app.errorhandler(404)
 def page_not_found(error):
