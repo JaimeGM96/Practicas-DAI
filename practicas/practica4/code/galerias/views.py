@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.http import HttpResponseRedirect
 from .models import Galeria, Cuadro
 from .forms import GaleriaForm, CuadroForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 
@@ -30,6 +30,10 @@ def iniciar_sesion(request):
     context["login_form"] = form
     return render(request, "iniciar_sesion.html", context)
 
+def cerrar_sesion(request):
+    logout(request)
+    messages.info(request, "Cerrada sesión correctamente")
+    return redirect("/")
 
 def lista_galerias(request):
     context = {}
