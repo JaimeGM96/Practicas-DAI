@@ -2,9 +2,34 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.http import HttpResponseRedirect
 from .models import Galeria, Cuadro
 from .forms import GaleriaForm, CuadroForm
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 
 def index(request):
     return render(request, 'index.html')
+
+def iniciar_sesion(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.error(request, "Inicio de sesión correctamente")
+                return redirect("/")
+            else:
+                messages.error(request, "Usuario o contraseña no válidos")
+        else:
+            messages.error(request, "Usuario o contraseña no válidos")
+    
+    form = AuthenticationForm()
+    context = {}
+    context["login_form"] = form
+    return render(request, "iniciar_sesion.html", context)
+
 
 def lista_galerias(request):
     context = {}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Iniciar sesion
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <form method="POST" class="px-4 py-3" style="margin: 18vw;">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <button class="btn btn-primary" type="submit">Iniciar sesion</button>
+    </form>
+</div>
+{% endblock body %}
