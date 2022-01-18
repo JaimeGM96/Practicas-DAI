@@ -30,21 +30,32 @@ def index():
 
   return render_template('index.html')
 
+# @app.route('/todos-pokemons')
+# def todos_pokemons():
+#   page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+
+#   pokemons = db.samples_pokemon.find()
+
+#   lista_pokemons = []
+#   for pokemon in pokemons:
+#     app.logger.debug(pokemon)
+#     lista_pokemons.append(pokemon)
+
+#   pagination_pokemons = lista_pokemons[offset: offset + per_page]
+#   pagination = Pagination(page=page, per_page=per_page, total=len(lista_pokemons), css_framework='bootstrap3')
+
+#   return render_template('lista.html', pokemons=pagination_pokemons, page=page, per_page=per_page, pagination=pagination)
+
 @app.route('/todos-pokemons')
 def todos_pokemons():
-  page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
-
   pokemons = db.samples_pokemon.find()
 
   lista_pokemons = []
   for pokemon in pokemons:
     app.logger.debug(pokemon)
     lista_pokemons.append(pokemon)
-
-  pagination_pokemons = lista_pokemons[offset: offset + per_page]
-  pagination = Pagination(page=page, per_page=per_page, total=len(lista_pokemons), css_framework='bootstrap3')
-
-  return render_template('lista.html', pokemons=pagination_pokemons, page=page, per_page=per_page, pagination=pagination)
+  
+  return render_template('lista.html', lista_pokemons=lista_pokemons)
 
 @app.route('/pokemons')
 def get_pokemons():
