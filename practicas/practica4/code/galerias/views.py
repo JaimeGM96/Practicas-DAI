@@ -55,7 +55,7 @@ def nueva_galeria(request):
 
         if form.is_valid():
             galeria = form.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/lista_galerias')
     else:
         form = GaleriaForm()
 
@@ -71,7 +71,7 @@ def nuevo_cuadro(request):
 
         if form.is_valid():
             cuadro = form.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/lista_cuadros')
     else:
         form = CuadroForm()
 
